@@ -5,11 +5,15 @@ const Login = lazy(() => import("../pages/Login"))
 const Register = lazy(() => import("../pages/Register"))
 const Step1Content = lazy(() => import("../pages/Introduce/Content/Step1"))
 const Step2Content = lazy(() => import("../pages/Introduce/Content/Step2"))
+const Home = lazy(() => import("../pages/Home"))
 
 const routes = [
   {
     path: "*",
     element: "暂时没开发"
+  }, {
+    path: "/",
+    element: <Home/>
   }, {
     path: "/login",
     element: <Login/>
@@ -22,10 +26,10 @@ const routes = [
     children: [
       {
         path: "/introduce/:username/step1",
-        element: <Step1Content />
+        element: <Step1Content/>
       }, {
         path: "/introduce/:username/step2",
-        element: <Step2Content />
+        element: <Step2Content/>
       }
     ]
   }

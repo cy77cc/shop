@@ -1,13 +1,16 @@
 import {memo} from "react";
 import Step2Wrapper from "./style";
 import {useNavigate, useParams} from "react-router-dom";
+import Step2ContentCpn from "../../../../components/IntroCpn/Step2Content";
 
 const Step2Content = memo(() => {
   const navigate = useNavigate();
   const {username} = useParams();
   return (
       <Step2Wrapper>
-        <div className="content-box">2</div>
+        <div className="content-box">
+          <Step2ContentCpn />
+        </div>
         <div className="footer">
           <div className="empty"></div>
           <div className="btn-group">

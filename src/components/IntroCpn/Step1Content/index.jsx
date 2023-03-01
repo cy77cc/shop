@@ -39,14 +39,16 @@ const Step1ContentCpn = memo(() => {
             <div className="info-item">
               您目前收入是多少？
             </div>
-            <div className="info-item">
-              <select name="" id="">
-                <option value=""></option>
+            <div className="info-item select-item">
+              <select name="" id="" className="info-item-select">
+                <option value="">￥800-￥8000</option>
               </select>
             </div>
             <div className="info-item">您将在哪个行业运营？</div>
-            <div className="info-item">
-              <select name="" id=""></select>
+            <div className="info-item select-item">
+              <select name="" id="" className="info-item-select">
+                <option value="服装">服装</option>
+              </select>
             </div>
           </div>
         </div>
