@@ -3,6 +3,8 @@
   src: url(../ttf/OPlusSans3-Regular.ttf);
 }
 
+
+
 html {
   font-family: oppoSans, serif !important;
   font-size: 16px;
@@ -15,10 +17,7 @@ button {
 
 /* 整个滚动条的样式 */
 ::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #f2f2f2;
-  background-color: #F2F2F2;
+  display: none;
 }
 
 /* 滚动条的轨道两端按钮，允许通过点击微调小方块的位置 */
@@ -40,7 +39,7 @@ button {
 ::-webkit-scrollbar-thumb {
   border-radius: 6px;
   box-shadow: inset 0 0 1px 0 #f2f2f2;
-  border: 3px solid #f2f2f2;
+  border: 1px solid #f2f2f2;
   background-color: #D9D9D9;
 }
 
