@@ -1,17 +1,31 @@
-import {Input, Radio} from "antd";
-import React, {memo, useState} from "react";
+import {Input, message, Radio} from "antd";
+import React, {memo, useEffect, useState} from "react";
 import LoginContentWrapper from "./style";
-import {MobileOutlined, AlipayOutlined} from "@ant-design/icons"
 import LoginBanner from "../Banner";
 import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import SHA256 from "crypto-js/sha256";
+import fetchData from "../../../utils/net";
+import {addInfo} from "../../../store";
 
 const LoginContent = memo(() => {
   // 判断是否在输入
   const [keyin, setKeyin] = useState([false, false])
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const navigate = useNavigate();
+  const [remember, setRemember] = useState(true)
+  const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
+  useEffect(() => {
+    fetchData("post", {}, "check_token").then(res => {
+      let data = res.data
+      if (data.status === 1) {
+        navigate("/")
+      }
+    })
+  })
   // handleInputStyle: 用于处理输入框的样式
   function handleInputStyle(index, value) {
     const newArr = keyin
@@ -19,20 +33,46 @@ const LoginContent = memo(() => {
     setKeyin([...newArr])
   }
 
-  function handleUsername(e) {
-    setUsername(e.target.value)
+  function handleEmail(e) {
+    setEmail(e.target.value)
   }
 
   function handlePassword(e) {
     setPassword(e.target.value)
   }
 
+  function handleRemember(e) {
+    setRemember(!remember)
+  }
+
+  function handleLogin(e) {
+    fetchData("post", {
+      "email": email,
+      "admin_password": SHA256(password).toString()
+    }, "login").then(res => {
+      let data = res.data
+      console.log(data)
+      if (data.status === 1) {
+        if (remember) {
+          localStorage.setItem("token", data.token)
+        }
+        dispatch(addInfo(data))
+        navigate("/")
+      } else {
+        setEmail("")
+        setPassword("")
+        messageApi.error("邮箱或密码错误")
+      }
+    })
+  }
+
   return (
       <LoginContentWrapper>
+        {contextHolder}
         <div className="login-item">
           <div className="login-content">
             <div className="item text">登录您的账号</div>
-            <div className="item username">
+            <div className="item email">
               <Input
                   size="large"
                   placeholder="请输入您的Email"
@@ -40,8 +80,8 @@ const LoginContent = memo(() => {
                   className={!keyin[0] ? 'normal' : 'active'}
                   onFocus={() => handleInputStyle(0, true)}
                   onBlur={() => handleInputStyle(0, false)}
-                  value={username}
-                  onChange={(e) => handleUsername(e)}
+                  value={email}
+                  onChange={(e) => handleEmail(e)}
               />
             </div>
             <div className="item password">
@@ -58,8 +98,10 @@ const LoginContent = memo(() => {
             </div>
             <div className="item forget-psw">
               <div className="forget-item">
-                {/*TODO 持久化*/}
-                <Radio>记住我</Radio>
+                <Radio
+                    checked={remember}
+                    onClick={handleRemember}
+                >记住我</Radio>
               </div>
               <div className="forget-item search-back">
                 {/* //TODO 忘记密码弹出页面 */}
@@ -67,24 +109,18 @@ const LoginContent = memo(() => {
               </div>
             </div>
             <div className="item use-email-login">
-              {/* // TODO 设置输入完成前后的背景颜色 */}
               <button
                   className="login-btn"
                   style={
-                    (username !== "" && password !== "")
+                    (email !== "" && password !== "")
                         ? {backgroundColor: "#0CAF60"}
                         : {backgroundColor: "#86D7B0"}
                   }
+                  onClick={handleLogin}
+                  disabled={(email === "" || password === "")}
               >
                 使用电子邮件登录
               </button>
-            </div>
-            <div className="item">
-              <span>登录其他方式</span>
-            </div>
-            <div className="item other-login-type">
-              <button><MobileOutlined/> 手机号</button>
-              <button><AlipayOutlined/> 支付宝</button>
             </div>
             <div className="item">
               还没有账号？

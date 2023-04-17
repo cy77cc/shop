@@ -1,19 +1,21 @@
-import {Input, Radio} from "antd";
+import {Input, message, Radio} from "antd";
 import React, {memo, useEffect, useState} from "react";
 import RegisterContentWrapper from "./style";
-import {MobileOutlined, AlipayOutlined} from "@ant-design/icons"
 import RegisterBanner from "../Banner";
 import {useNavigate} from "react-router-dom";
+import SHA256 from "crypto-js/sha256";
+import fetchData from "../../../utils/net";
 
 const RegisterContent = memo(() => {
   // 判断是否在输入
   const [keyin, setKeyin] = useState([false, false, false, false])
   const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
   const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [read, setRead] = useState(false)
   const [isDisable, setIsDisable] = useState(true)
+  const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   // handleInputStyle: 用于处理输入框的样式
   function handleInputStyle(index, value) {
@@ -48,14 +50,26 @@ const RegisterContent = memo(() => {
 
   function handleRegister(e) {
     if (name !== "" && email !== "" && username !== "" && password !== "" && read) {
-      // TODO 与数据库交互
-      navigate(`/introduce/${username}/step1`)
+      fetchData("post", {
+        name: name,
+        username: username,
+        email: email,
+        admin_password: SHA256(password).toString(),
+      }, "register").then(res => {
+        let data = res.data
+        if (data.status === 0) {
+          messageApi.error(data.message)
+        } else {
+          navigate(`/introduce/${data.id}/step1`)
+        }
+      })
     } else {
-
+      messageApi.error("请输入完整信息")
     }
   }
 
   return (<RegisterContentWrapper>
+    {contextHolder}
     <div className="register-item">
       <div className="register-content">
         <div className="item text">创建您的账号</div>
@@ -120,15 +134,8 @@ const RegisterContent = memo(() => {
               onClick={handleRegister}
               disabled={isDisable}
           >
-            使用电子邮件登录
+            使用电子邮件注册
           </button>
-        </div>
-        <div className="item">
-          <span>登录其他方式</span>
-        </div>
-        <div className="item other-register-type">
-          <button><MobileOutlined/> 手机号</button>
-          <button><AlipayOutlined/> 支付宝</button>
         </div>
         <div className="item">
           已有账号？

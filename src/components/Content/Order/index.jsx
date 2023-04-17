@@ -1,9 +1,10 @@
-import {memo, useRef, useState} from "react";
+import {memo, useEffect, useRef, useState} from "react";
 import OrderWrapper from "./style";
 import OrderContent from "./OrderContent";
 import classNames from "classnames";
 import SHA256 from "crypto-js/sha256";
 import data from "./data"
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 const navData = [
   {
@@ -43,25 +44,35 @@ const navData = [
 ]
 
 const Order = memo(() => {
-  const [navItems, setNavItems] = useState(navData)
+  // const [navItems, setNavItems] = useState(navData)
+  const navItems = navData
   const [orderData, setOrderData] = useState(data)
+  const navigate = useNavigate();
   const lineRef = useRef();
+  // 解析URL参数
+  const [params] = useSearchParams();
+  const query = Object.fromEntries(params);
+  const {pageSize} = query
 
-  function handleNav(e, index, type) {
-    const newArr = navItems
-    for (let i = 0; i < newArr.length; i++) {
-      newArr[i].isActive = false
+  useEffect(() => {
+    let type = Number(query.type)
+    let offset
+    if (type === 6) {
+      offset = 0
+    } else {
+      offset = type+1
     }
-    newArr[index].isActive = true
-    // console.log(lineRef.current)
-    lineRef.current.style.left = `${index * 8}rem`
-    setNavItems([...newArr])
+    lineRef.current.style.left = `${offset*8}rem`
     if (type !== 6) {
       const result = data.filter(v => v.status === type)
       setOrderData([...result])
     } else {
       setOrderData(data)
     }
+  }, [query.type])
+
+  function handleNav(e, index, type) {
+    navigate(`/order?page=1&pageSize=${pageSize}&type=${type}`)
   }
 
   return (
@@ -72,7 +83,7 @@ const Order = memo(() => {
               return (
                   <div
                       key={SHA256(item.title + index)}
-                      className={classNames("nav-item", {"active": item.isActive})}
+                      className={classNames("nav-item", {"active": Number(query.type) === item.type})}
                       onClick={(e) => handleNav(e, index, item.type)}
                   >{item.title}</div>
               )

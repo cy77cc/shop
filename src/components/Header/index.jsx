@@ -2,9 +2,15 @@ import {memo, useState} from "react";
 import HeaderWrapper from "./style";
 import {Avatar, Badge, Drawer, Input} from "antd";
 import {BellOutlined, MailOutlined, SearchOutlined} from "@ant-design/icons";
+import {useSelector} from "react-redux";
 
 const Header = memo(() => {
   const [modalOpen, setModalOpen] = useState(false)
+  const {admin} = useSelector((state) => {
+    return {
+      admin: state.admin
+    }
+  })
   return (
       <HeaderWrapper>
         <div className="header-item"></div>
@@ -12,7 +18,8 @@ const Header = memo(() => {
           <div className="search-item">
             <Input
                 prefix={<SearchOutlined style={{fontSize: "1rem"}}/>}
-                style={{height: "2.5rem",
+                style={{
+                  height: "2.5rem",
                   background: "#FAFAFA",
                   border: "none"
                 }}/>
@@ -27,8 +34,8 @@ const Header = memo(() => {
             </Drawer>
           </div>
           <div className="avatar">
-            <Avatar/>
-            <span style={{marginLeft: "1rem"}}>店铺名称</span>
+            <Avatar src={admin.avatar}/>
+            <span style={{marginLeft: "1rem"}}>{admin.shop_name}</span>
           </div>
         </div>
       </HeaderWrapper>

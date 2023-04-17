@@ -7,6 +7,7 @@ import AllSale from "./AllSale";
 import History from "./History";
 
 const DataBoard = memo(() => {
+
   return (<DataBoardWrapper>
     <div className="data-board-item data-board-top">
       <div className="board-top-left">

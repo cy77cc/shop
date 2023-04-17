@@ -1,52 +1,14 @@
-import {memo, useEffect, useState} from "react";
+import {memo, useContext, useEffect, useState} from "react";
 import {Input, DatePicker, Pagination} from "antd";
 import {CloudDownloadOutlined, SearchOutlined} from "@ant-design/icons";
 import SHA256 from "crypto-js/sha256"
 import utc from "dayjs/plugin/utc"
 import dayjs from "dayjs";
 import StatusBox from "./StatusBox";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {PayStatusContext, StatusContext} from "../../../../context";
 
 dayjs.extend(utc)
-
-const payStatus = [
-  {
-    text: "未支付",
-    color: "#F4F0FF",
-    fontColor: "#8C62FF"
-  }, {
-    text: "已支付",
-    color: "#E7F7EF",
-    fontColor: "#0CAF60"
-  }
-]
-
-const status = [
-  {
-    text: "待付款",
-    color: "#baffff",
-    fontColor: "#6b9ff1"
-  }, {
-    text: "待发货",
-    color: "#FFF0E6",
-    fontColor: "#FE964A"
-  }, {
-    text: "已发货",
-    color: "#F4F0FF",
-    fontColor: "#8C62FF"
-  }, {
-    text:"退款中",
-    color: "#fdffc3",
-    fontColor: "#a89d0d",
-  }, {
-    text: "已完成",
-    color: "#E7F7EF",
-    fontColor: "#0CAF60"
-  }, {
-    text: "已取消",
-    color: "#FFF0F0",
-    fontColor: "#FD6A6A"
-  }
-]
 
 const {RangePicker} = DatePicker
 
@@ -55,10 +17,27 @@ const OrderContent = memo((props) => {
   const [checkAll, setCheckAll] = useState(false)
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(10)
+  const payStatus = useContext(PayStatusContext)
+  const status = useContext(StatusContext)
+  const navigate = useNavigate();
+  // 解析URL参数
+  const [params] = useSearchParams();
+  const query = Object.fromEntries(params);
+
+  const [page, setPage] = useState(Number(query.page))
+  const [pageSize, setPageSize] = useState(Number(query.pageSize))
 
   useEffect(() => {
     setOrderList([...props.data])
   }, [props.data])
+
+  useEffect(() => {
+    setPage(Number(query.page))
+  }, [query.page])
+
+  useEffect(() => {
+    setPageSize(Number(query.pageSize))
+  }, [query.pageSize])
 
   function handleCheck(e, index) {
     const newArr = orderList
@@ -85,8 +64,9 @@ const OrderContent = memo((props) => {
   }
 
   function handlePageChange(page, pageSize) {
-    setStart(page*pageSize)
-    setEnd(page*pageSize+pageSize)
+    setStart((page - 1) * pageSize)
+    setEnd((page - 1) * pageSize + pageSize)
+    navigate(`/order?page=${page}&pageSize=${pageSize}&type=${query.type}`)
   }
 
   return (
@@ -148,50 +128,53 @@ const OrderContent = memo((props) => {
           </div>
           <div className="t-body">
             {orderList.map((item, i) => {
-                if (i >= start && i < end) {
-                  return (
-                      <div className="order-item" key={SHA256(item.goodsName + i)}>
-                        <div className="check-all">
-                          <input
-                              type="radio"
-                              checked={item.checked}
-                              className="radio"
-                              value={item.checked}
-                              onChange={(e) => handleCheck(e, i)}
-                          />
-                        </div>
-                        <div className="order-name">
-                          <div>{item.goodsName}</div>
-                          <div className="order-id">#ID{item.id}</div>
-                        </div>
-                        <div className="order-date">
-                          {dayjs(item.saleTime).utc().format("YYYY.MM.DD")}
-                        </div>
-                        <div className="order-buyer">
-                          {item.buyer}
-                        </div>
-                        <div className="order-pay-status">
-                          <StatusBox data={payStatus[item.payStatus]}/>
-                        </div>
-                        <div className="order-status">
-                          <StatusBox data={status[item.status]}/>
-                        </div>
-                        <div className="order-price">
-                          ￥{item.price}
-                        </div>
+              if (i >= start && i < end) {
+                return (
+                    <div className="order-item" key={SHA256(item.goodsName + i)}>
+                      <div className="check-all">
+                        <input
+                            type="radio"
+                            checked={item.checked}
+                            className="radio"
+                            value={item.checked}
+                            onChange={(e) => handleCheck(e, i)}
+                        />
                       </div>
-                  )
-                } else {
-                  return null
-                }
-              })}
+                      <div
+                          className="order-name"
+                          onClick={() => navigate(`/order/${item.id}`)}>
+                        <div>{item.goodsName}</div>
+                        <div className="order-id">#ID{item.id}</div>
+                      </div>
+                      <div className="order-date">
+                        {dayjs(item.saleTime).utc().format("YYYY.MM.DD")}
+                      </div>
+                      <div className="order-buyer">
+                        {item.buyer}
+                      </div>
+                      <div className="order-pay-status">
+                        <StatusBox data={payStatus[item.payStatus]}/>
+                      </div>
+                      <div className="order-status">
+                        <StatusBox data={status[item.status]}/>
+                      </div>
+                      <div className="order-price">
+                        ￥{item.price}
+                      </div>
+                    </div>
+                )
+              } else {
+                return null
+              }
+            })}
           </div>
         </div>
         <div className="page-control">
           <Pagination
-              defaultCurrent={1}
+              defaultCurrent={page}
+              defaultPageSize={pageSize}
               total={orderList.length}
-              onChange={(page, pageSize) => handlePageChange(page, pageSize)} />
+              onChange={(page, pageSize) => handlePageChange(page, pageSize)}/>
         </div>
       </>
   )

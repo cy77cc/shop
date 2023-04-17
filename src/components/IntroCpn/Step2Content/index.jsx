@@ -1,10 +1,56 @@
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import Step2ContentCpnWrapper from "./style";
-import {Cascader, Input} from "antd";
+import {Cascader, Input, message} from "antd";
+import {useNavigate, useParams} from "react-router-dom";
+import fetchData from "../../../utils/net";
 
 const Step1ContentCpn = memo(() => {
+  const navigate = useNavigate();
+  const [options, setOptions] = useState()
+  const [messageApi, contentHolder] = message.useMessage()
+  const [provinceCode, setProvinceCode] = useState()
+  const [cityCode, setCityCode] = useState()
+  const [areaCode, setAreaCode] = useState()
+  const [detail, setDetail] = useState()
+  const [phone, setPhone] = useState()
+  const params = useParams()
+  const {id} = params
+
+  useEffect(() => {
+    fetchData("get", {}, "locate").then(res => {
+      if (res.data.status === 1) {
+        setOptions(res.data.locate)
+      } else {
+        messageApi.error(res.data.message)
+      }
+    })
+  }, [messageApi])
+
+  const filter = (inputValue, path) =>
+      path.some((option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1)
+
+  function handleFinish(e) {
+    fetchData("post", {
+      admin_id: Number(id),
+      province_code: provinceCode,
+      city_code: cityCode,
+      area_code: areaCode,
+      phone: phone,
+      detail_address: detail
+    }, "introduce/step2").then(res => {
+      let data = res.data
+      if (data.status !== 1) {
+        messageApi.error(data.message)
+      } else {
+        localStorage.setItem("token", data.token)
+        navigate("/")
+      }
+    })
+  }
+
   return (
       <Step2ContentCpnWrapper>
+        {contentHolder}
         <div className="bar">
           <div className="bar-left"></div>
           <div className="bar-right"></div>
@@ -20,38 +66,44 @@ const Step1ContentCpn = memo(() => {
             </div>
             <div className="info-item">
               {/*TODO 省市区三级联动*/}
-              <Cascader style={{width: "100%"}} />
+              <Cascader
+                  style={{width: "100%"}}
+                  options={options}
+                  placeholder="下拉选择"
+                  showSearch={{filter}}
+                  onChange={(value, selectedOptions) => {
+                    setProvinceCode(value[0])
+                    setCityCode(value[1])
+                    setAreaCode(value[2])
+                  }}
+              />
             </div>
             <div className="info-item">
               <span>详细地址</span>
             </div>
             <div className="info-item">
-              <Input placeholder="请输入详细地址" />
-            </div>
-            <div className="info-item">
-              <span>邮政编码</span>
-            </div>
-            <div className="info-item">
-              <Input placeholder="请输入邮政编码" />
-            </div>
-            <div className="info-item name-box">
-              <div className="name-item">姓氏</div>
-              <div className="name-item">名字</div>
-            </div>
-            <div className="info-item name-box">
-              <div className="name-item">
-                <Input placeholder="请输入姓氏" />
-              </div>
-              <div className="name-item">
-                <Input placeholder="请输入名字" />
-              </div>
+              <Input
+                  placeholder="请输入详细地址"
+                  value={detail}
+                  onChange={(e) => setDetail(e.target.value)} />
             </div>
             <div className="info-item">
               <span>手机号</span>
             </div>
             <div className="info-item">
-              <Input placeholder="请输入手机号" />
+              <Input
+                  placeholder="请输入手机号"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+              />
             </div>
+          </div>
+        </div>
+        <div className="footer">
+          <div className="empty"></div>
+          <div className="btn-group">
+            <button className="btn-item-left" onClick={() => navigate(`/introduce/${id}/step1`)}>返回</button>
+            <button className="btn-item-right" onClick={handleFinish}>完成</button>
           </div>
         </div>
       </Step2ContentCpnWrapper>)

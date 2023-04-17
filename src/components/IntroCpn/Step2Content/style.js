@@ -59,6 +59,7 @@ const Step2ContentCpnWrapper = styled.div`
         width: 100%;
         font-size: 1rem;
         margin: 1rem 0;
+
         input {
           background-color: #FAFAFA;
         }
@@ -73,13 +74,6 @@ const Step2ContentCpnWrapper = styled.div`
           border: none;
           outline: none;
           padding: 0 1rem;
-        }
-      }
-      
-      .name-box {
-        display: flex;
-        .name-item {
-          flex: 1;
         }
       }
     }

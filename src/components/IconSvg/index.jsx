@@ -181,3 +181,29 @@ export const MyStoreIcon = memo(() => {
       </svg>
   )
 })
+
+export const PaidIcon = memo(() => {
+  return (
+      <svg id="Icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="32"
+           height="32" viewBox="0 0 32 32">
+        <defs>
+          <clipPath id="clip-path">
+            <rect id="路径" width="32" height="32" rx="16" fill="#e7f7ef"/>
+          </clipPath>
+        </defs>
+        <rect id="路径-2" data-name="路径" width="32" height="32" rx="16" fill="#e7f7ef"/>
+        <g id="Icon-2" data-name="Icon" clipPath="url(#clip-path)">
+          <g id="icon-3" data-name="icon" transform="translate(8 8)">
+            <rect id="路径-3" data-name="路径" width="16" height="16" fill="none"/>
+            <path id="路径-4" data-name="路径" d="M6.667,0a6.667,6.667,0,1,0,6.667,6.667A6.669,6.669,0,0,0,6.667,0Z"
+                  transform="translate(1.333 1.333)" fill="none" stroke="#0caf60" strokeLinejoin="round"
+                  strokeMiterlimit="10" strokeWidth="1" strokeDasharray="0 0"/>
+            <path id="_" data-name="￥"
+                  d="M2.063,6.477a1.023,1.023,0,0,0,.961-.961V4.807H4.177a.35.35,0,0,0,.313-.313h0a.35.35,0,0,0-.313-.313H3.024V3.472H4.172a.355.355,0,0,0,.317-.317h0a.355.355,0,0,0-.317-.317H3.323l1.5-2.38A.353.353,0,0,0,4.573,0h0a.96.96,0,0,0-.808.471L2.6,2.52H2.539L1.395.488A.988.988,0,0,0,.56,0h0A.368.368,0,0,0,.3.476L1.764,2.837H.933a.355.355,0,0,0-.317.317h0a.355.355,0,0,0,.317.317H2.063v.709H.929a.35.35,0,0,0-.313.313h0a.35.35,0,0,0,.313.313H2.063V6a.534.534,0,0,0,.481.481Z"
+                  transform="translate(5.368 4.856)" fill="#0caf60"/>
+          </g>
+        </g>
+      </svg>
+
+  )
+})

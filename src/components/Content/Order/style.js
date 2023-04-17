@@ -101,6 +101,13 @@ const OrderWrapper = styled.div`
       }
     }
     .t-body {
+      height: ${8*4.5}rem;
+      overflow: scroll;
+      ::-webkit-scrollbar {
+        display: block;
+        width: .5rem;
+        background: #ccc;
+      }
       .order-item {
         height: 4.5rem;
         display: flex;
@@ -113,6 +120,7 @@ const OrderWrapper = styled.div`
         }
         .order-name {
           flex: 4;
+          cursor: pointer;
           .order-id {
             color: #718096;
           }
@@ -132,6 +140,9 @@ const OrderWrapper = styled.div`
         .order-price {
           flex: 3;
         }
+      }
+      .order-item:hover {
+        background: #FAFAFA;
       }
     }
   }

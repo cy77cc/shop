@@ -16,7 +16,7 @@ const list = [{
   title: "订单",
   icon: <OrderIcon/>,
   name: "order",
-  path: "/order",
+  path: "/order?page=1&pageSize=10&type=6",
   active: false
 }, {
   title: "商品列表",
@@ -27,8 +27,8 @@ const list = [{
 }, {
   title: "客户",
   icon: <ClientIcon/>,
-  name: "client",
-  path: "/client",
+  name: "account",
+  path: "/account?page=1&pageSize=10",
   active: false
 }, {
   title: "运营数据",
@@ -59,8 +59,10 @@ const Sider = memo(() => {
           <div className="nav-item nav-slogan">导航</div>
           {list.map((item, index) => {
             return (
+                // 解析路径
                 <div
-                    className={classNames("nav-item nav-hover", {'active': location.pathname === item.path})}
+                    className={classNames("nav-item nav-hover",
+                        {'active': location.pathname.split('/')[1] === item.path.split('/')[1].split('?')[0]})}
                     key={SHA256(item.title + index)}
                     onClick={() => navigate(item.path)}
                 >{item.icon} <span style={{marginLeft: "1rem"}}>{item.title}</span></div>)

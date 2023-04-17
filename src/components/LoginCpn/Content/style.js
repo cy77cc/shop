@@ -15,7 +15,7 @@ const LoginContentWrapper = styled.div`
       .text {
         font-size: 1.88rem;
       }
-      .username, .password {
+      .email, .password {
         .normal {
           background-color: #FAFAFA;
           height: 82%;
@@ -55,22 +55,6 @@ const LoginContentWrapper = styled.div`
           border: none;
           cursor: pointer;
           color: #ffffff;
-        }
-      }
-      .other-login-type {
-        display: flex;
-        justify-content: space-around;
-        button {
-          width: 13.53rem;
-          height: 3.5rem;
-          background: #ffffff;
-          border-radius: 0.75rem 0.75rem 0.75rem 0.75rem;
-          opacity: 1;
-          border: 0.06rem solid #eeeff2;
-          cursor: pointer;
-          :active {
-            border: 1px solid #007E60;
-          }
         }
       }
       .register {
