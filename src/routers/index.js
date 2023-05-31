@@ -1,6 +1,16 @@
 import {lazy} from "react"
 import Introduce from "../pages/Introduce";
-import {DataBoard, Order, OrderDetail, GoodsList, AccountList, AccountDetail} from "../components/Content";
+import {
+  DataBoard,
+  Order,
+  OrderDetail,
+  GoodsList,
+  AccountList,
+  AccountDetail,
+  AddGood,
+  AddAccount,
+  OpData, Promotion, MyStore, ModifyProfile, ModifyPassword
+} from "../components/Content";
 
 const Login = lazy(() => import("../pages/Login"))
 const Register = lazy(() => import("../pages/Register"))
@@ -32,17 +42,29 @@ const routes = [
         path: "/account",
         element: <AccountList/>,
       }, {
+        path: "/goods/add",
+        element: <AddGood/>
+      }, {
         path: "/account/detail/:id",
         element: <AccountDetail/>
       }, {
+        path: "/account/add",
+        element: <AddAccount/>
+      }, {
         path: "/opdata",
-        element: "运营数据"
+        element: <OpData/>
       }, {
         path: "/promotion",
-        element: "促销营销"
+        element: <Promotion/>
       }, {
         path: "/mystore",
-        element: "我的店铺"
+        element: <MyStore/>
+      }, {
+        path: "/modify/profile",
+        element: <ModifyProfile/>
+      }, {
+        path: "/modify/password",
+        element: <ModifyPassword/>
       }
     ]
   }, {

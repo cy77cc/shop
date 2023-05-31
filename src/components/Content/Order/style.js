@@ -78,11 +78,13 @@ const OrderWrapper = styled.div`
       display: flex;
       align-items: center;
       border-bottom: .1rem solid #EEEFF2;
+      padding-left: 1.5rem;
       .check-all {
         flex: 1;
       }
       .order-name {
         flex: 4;
+        
       }
       .order-date {
         flex: 3;
@@ -109,10 +111,11 @@ const OrderWrapper = styled.div`
         background: #ccc;
       }
       .order-item {
-        height: 4.5rem;
+        height: 6rem;
         display: flex;
         align-items: center;
         border-bottom: .1rem solid #EEEFF2;
+        padding-left: 1.5rem;
         
         .check-all {
           flex: 1;
@@ -123,6 +126,12 @@ const OrderWrapper = styled.div`
           cursor: pointer;
           .order-id {
             color: #718096;
+          }
+          .name {
+            white-space: nowrap; /* 防止文字换行 */
+            overflow: hidden; /* 隐藏超出容器宽度的部分 */
+            text-overflow: ellipsis; /* 显示省略号 */
+            width: 13em;
           }
         }
         .order-date {
@@ -145,6 +154,12 @@ const OrderWrapper = styled.div`
         background: #FAFAFA;
       }
     }
+  }
+  
+  .page-control {
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;
   }
 `
 

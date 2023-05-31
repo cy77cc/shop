@@ -1,26 +1,31 @@
 import {memo} from "react";
 import OrderDetailWrapper from "./style";
-import {useNavigate, useParams} from "react-router-dom";
-import {LeftOutlined, PrinterOutlined} from "@ant-design/icons";
+import {useNavigate} from "react-router-dom";
+import {LeftOutlined} from "@ant-design/icons";
 import {BuyerInfo, OrderInfo, PayInfo, Remark} from "./Cpns";
 
 const OrderDetail = memo(() => {
-  const getParams = useParams()
+  // const getParams = useParams()
   const navigate = useNavigate();
-  const orderId = getParams.id
+  // const orderId = Number(getParams.id)
 
   function handleBack() {
     navigate(-1)
   }
+
+  // TODO order detail
+  // useEffect(() => {
+  //   fetchData("get", {}, `order/detail?order_id=${orderId}`)
+  //       .then(res => {
+  //
+  //       })
+  // }, [orderId])
 
   return (
       <OrderDetailWrapper>
         <div className="order-detail-header">
           <div className="back" onClick={() => handleBack()}>
             <LeftOutlined style={{marginRight: ".5rem"}}/> 订单详情
-          </div>
-          <div className="print-order">
-            <PrinterOutlined style={{marginRight: ".5rem"}}/> 打印订单
           </div>
         </div>
         <div className="order-detail-content">

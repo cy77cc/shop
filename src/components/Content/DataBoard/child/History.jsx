@@ -1,38 +1,33 @@
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {EllipsisOutlined} from "@ant-design/icons";
-import dressPic from "../../../assets/img/dress.png"
-import overcoatPic from "../../../assets/img/overcoat.png"
-import shirtPic from "../../../assets/img/shirt.png"
 import SHA256 from "crypto-js/sha256";
 import {useNavigate} from "react-router-dom";
-
-const orders = [
-  {
-    title: "黑色连衣裙",
-    img: dressPic,
-    price: 400.98,
-    saleTime: "2022,9,29",
-  }, {
-    title: "黄色大衣",
-    img: overcoatPic,
-    price: 550.75,
-    saleTime: "2022,9,29",
-  }, {
-    title: "花色衬衫",
-    img: shirtPic,
-    price: 210.98,
-    saleTime: "2022,9,29",
-  }
-]
+import fetchData from "../../../../utils/net";
+import {message} from "antd";
+import dayjs from "dayjs";
 
 const History = memo(() => {
   const navigate = useNavigate();
+  const [orders, setOrders] = useState([])
+
+  useEffect(() => {
+    fetchData("get", {}, "data/history/order")
+        .then(res => {
+          let data = res.data
+          if (data.status !== 1) {
+            message.error(data.message)
+          } else {
+            setOrders(data.orders)
+          }
+        })
+  }, [])
+
   return (
       <>
         <div className="history-order-title">
           <div className="title-item">历史订单</div>
           <div className="title-item more" onClick={() => {
-          navigate("/order")
+          navigate("/order?page=1&pageSize=10&type=6")
           }
           }><EllipsisOutlined/></div>
         </div>
@@ -47,8 +42,8 @@ const History = memo(() => {
                     <div className="item-detail">
                       <div className="detail-title">{item.title}</div>
                       <div className="detail-content">
-                        <span className="price">￥{item.price}</span>
-                        <span className="time">{item.saleTime}</span>
+                        <span className="price">￥{item.price.toFixed(2)}</span>
+                        <span className="time">{dayjs(item.saleTime).utc().format("YYYY,MM,DD")}</span>
                       </div>
                     </div>
                   </div>

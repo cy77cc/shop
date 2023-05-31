@@ -14,7 +14,6 @@ const LoginContent = memo(() => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [remember, setRemember] = useState(true)
-  const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -48,27 +47,26 @@ const LoginContent = memo(() => {
   function handleLogin(e) {
     fetchData("post", {
       "email": email,
-      "admin_password": SHA256(password).toString()
+      "password": SHA256(password).toString()
     }, "login").then(res => {
       let data = res.data
-      console.log(data)
       if (data.status === 1) {
         if (remember) {
           localStorage.setItem("token", data.token)
         }
         dispatch(addInfo(data))
+        message.success("欢迎回来")
         navigate("/")
       } else {
         setEmail("")
         setPassword("")
-        messageApi.error("邮箱或密码错误")
+        message.error("邮箱或密码错误")
       }
     })
   }
 
   return (
       <LoginContentWrapper>
-        {contextHolder}
         <div className="login-item">
           <div className="login-content">
             <div className="item text">登录您的账号</div>

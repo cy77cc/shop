@@ -15,7 +15,6 @@ const RegisterContent = memo(() => {
   const [password, setPassword] = useState("")
   const [read, setRead] = useState(false)
   const [isDisable, setIsDisable] = useState(true)
-  const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   // handleInputStyle: 用于处理输入框的样式
   function handleInputStyle(index, value) {
@@ -54,22 +53,21 @@ const RegisterContent = memo(() => {
         name: name,
         username: username,
         email: email,
-        admin_password: SHA256(password).toString(),
+        password: SHA256(password).toString(),
       }, "register").then(res => {
         let data = res.data
         if (data.status === 0) {
-          messageApi.error(data.message)
+          message.error(data.message)
         } else {
           navigate(`/introduce/${data.id}/step1`)
         }
       })
     } else {
-      messageApi.error("请输入完整信息")
+      message.error("请输入完整信息")
     }
   }
 
   return (<RegisterContentWrapper>
-    {contextHolder}
     <div className="register-item">
       <div className="register-content">
         <div className="item text">创建您的账号</div>

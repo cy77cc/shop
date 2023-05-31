@@ -22,7 +22,7 @@ const list = [{
   title: "商品列表",
   icon: <GoodsListIcon/>,
   name: "goods-list",
-  path: "/goods",
+  path: "/goods?page=1&pageSize=10",
   active: false
 }, {
   title: "客户",

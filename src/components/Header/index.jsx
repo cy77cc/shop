@@ -1,8 +1,24 @@
 import {memo, useState} from "react";
 import HeaderWrapper from "./style";
-import {Avatar, Badge, Drawer, Input} from "antd";
-import {BellOutlined, MailOutlined, SearchOutlined} from "@ant-design/icons";
+import {Avatar, Badge, Drawer, Dropdown} from "antd";
+import {BellOutlined, MailOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
+import {Logout, ModifyInfo, ModifyPassword} from "./child/LabelItems";
+
+const items = [
+  {
+    label: <ModifyInfo/>,
+    key: '0'
+  },
+  {
+    label: <ModifyPassword/>,
+    key: '1'
+  },
+  {
+    label: <Logout/>,
+    key: '2'
+  }
+]
 
 const Header = memo(() => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -16,13 +32,6 @@ const Header = memo(() => {
         <div className="header-item"></div>
         <div className="header-item">
           <div className="search-item">
-            <Input
-                prefix={<SearchOutlined style={{fontSize: "1rem"}}/>}
-                style={{
-                  height: "2.5rem",
-                  background: "#FAFAFA",
-                  border: "none"
-                }}/>
           </div>
           <div className="mail-item"><MailOutlined/></div>
           <div className="bell-item">
@@ -33,10 +42,15 @@ const Header = memo(() => {
               {/*  TODO 通知*/}
             </Drawer>
           </div>
-          <div className="avatar">
-            <Avatar src={admin.avatar}/>
-            <span style={{marginLeft: "1rem"}}>{admin.shop_name}</span>
-          </div>
+          <Dropdown
+              menu={{items,}}
+              trigger={['click']}
+          >
+            <div className="avatar">
+              <Avatar src={admin.avatar}/>
+              <span style={{marginLeft: "1rem"}}>{admin.shop_name}</span>
+            </div>
+          </Dropdown>
         </div>
       </HeaderWrapper>
   )

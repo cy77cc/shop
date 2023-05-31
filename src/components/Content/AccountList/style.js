@@ -45,11 +45,10 @@ const AccountWrapper = styled.div`
   }
 
   .filter {
-    height: 0rem;
+    height: 0;
     display: flex;
     transition: height .8s ease;
     align-items: flex-end;
-    border-bottom: 0.08rem solid #EEEFF2;
     overflow: hidden;
     
     .filter-item {
@@ -100,6 +99,10 @@ const AccountWrapper = styled.div`
         width: 100%;
         display: flex;
         border-bottom: 0.08rem solid #EEEFF2;
+        transition: background .5s ease;
+        :hover {
+          background: rgba(238, 239, 242, .4);
+        }
         
         .username {
           padding-left: 4rem;
@@ -135,6 +138,7 @@ const AccountWrapper = styled.div`
     border-top: 0.08rem solid #EEEFF2;
     display: flex;
     align-items: flex-end;
+    justify-content: center;
   }
 `
 

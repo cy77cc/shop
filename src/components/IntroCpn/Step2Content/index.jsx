@@ -7,7 +7,6 @@ import fetchData from "../../../utils/net";
 const Step1ContentCpn = memo(() => {
   const navigate = useNavigate();
   const [options, setOptions] = useState()
-  const [messageApi, contentHolder] = message.useMessage()
   const [provinceCode, setProvinceCode] = useState()
   const [cityCode, setCityCode] = useState()
   const [areaCode, setAreaCode] = useState()
@@ -21,10 +20,10 @@ const Step1ContentCpn = memo(() => {
       if (res.data.status === 1) {
         setOptions(res.data.locate)
       } else {
-        messageApi.error(res.data.message)
+        message.error(res.data.message)
       }
     })
-  }, [messageApi])
+  }, [])
 
   const filter = (inputValue, path) =>
       path.some((option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1)
@@ -40,8 +39,9 @@ const Step1ContentCpn = memo(() => {
     }, "introduce/step2").then(res => {
       let data = res.data
       if (data.status !== 1) {
-        messageApi.error(data.message)
+        message.error(data.message)
       } else {
+        localStorage.removeItem("token")
         localStorage.setItem("token", data.token)
         navigate("/")
       }
@@ -50,7 +50,6 @@ const Step1ContentCpn = memo(() => {
 
   return (
       <Step2ContentCpnWrapper>
-        {contentHolder}
         <div className="bar">
           <div className="bar-left"></div>
           <div className="bar-right"></div>

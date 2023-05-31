@@ -1,5 +1,4 @@
 import {createContext} from "react";
-
 export const PayStatusContext = createContext([
   {
     text: "未支付",
@@ -26,7 +25,7 @@ export const StatusContext = createContext([
     color: "#F4F0FF",
     fontColor: "#8C62FF"
   }, {
-    text:"退款中",
+    text: "退款中",
     color: "#fdffc3",
     fontColor: "#a89d0d",
   }, {

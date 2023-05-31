@@ -48,3 +48,16 @@ button {
 ::-webkit-scrollbar-thumb:horizontal:hover {
   background-color: #c0c0c0;
 }
+
+.mr-75 {
+  margin-right: .75rem;
+}
+
+.clear-input {
+  border: none;
+  outline: none;
+  background: #FAFAFA;
+  height: 3.5rem;
+  border-radius: .75rem;
+  font-size: 1rem;
+}

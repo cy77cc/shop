@@ -14,7 +14,6 @@ const Step1ContentCpn = memo(() => {
   const [taobao, setTaobao] = useState(false)
   const [selfWeb, setSelfWeb] = useState(false)
   const [more, setMore] = useState(false)
-  const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate();
   const params = useParams();
 
@@ -22,12 +21,12 @@ const Step1ContentCpn = memo(() => {
     fetchData("post", {}, "industry").then(res => {
       let data = res.data
       if (data.status === 0) {
-        messageApi.error(data.message)
+        message.error(data.message)
       } else {
         setIndustries([...data.industries])
       }
     })
-  }, [messageApi])
+  }, [])
 
 
   function handleIsSale(e) {
@@ -68,7 +67,7 @@ const Step1ContentCpn = memo(() => {
         navigate(`/introduce/${params.id}/step2`)
       } else {
         if (data.status !== 1) {
-          messageApi.error(data.message)
+          message.error(data.message)
         } else {
           navigate(`/introduce/${params.id}/step2`)
         }
@@ -77,7 +76,6 @@ const Step1ContentCpn = memo(() => {
   }
 
   return (<Step1ContentCpnWrapper>
-    {contextHolder}
     <div className="bar">
       <div className="bar-left"></div>
       <div className="bar-right"></div>
